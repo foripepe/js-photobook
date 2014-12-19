@@ -134,14 +134,8 @@ var add = (function () {
         //img.style.backgroundPosition = 'center center';
         //img.style.backgroundSize = 'cover';
         img.style.position = "absolute";
-        //
-        //img.style["clip-path"] = 'url(#clipping)';
-        //img.style.clipPath = 'url(#clipping)';
-        //img.clipPath = 'url(#clipping)';
-        //img.class = 'imgmask';
         //img.setAttribute("class", "imgmask");
         //div.setAttribute("class", "imgmask");
-        //
         div.appendChild(img);
 
         options.container.appendChild(div);
