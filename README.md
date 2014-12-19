@@ -1,6 +1,10 @@
 js-photobook
 ============
 
-Serving the files in local:
-npm install connect serve-static
-node server.js
+Serving the files in local
+
+Install: npm install connect serve-static
+
+Run: node server.js
+
+Check in browser: http://localhost:8080/
