@@ -5,13 +5,13 @@ var add = (function () {
 
     var counter = 0;
     var maxCounter = 100;
-    var myTimeout = 10;
+    var myTimeout = 20;
 
     var originalImage = null;
 
     function init() {
         console.warn('Booting');
-        var container = document.getElementById('container');
+        container = document.getElementById('container');
 
         placeholders.push( createPlaceholder({
             container: container,
@@ -46,8 +46,78 @@ var add = (function () {
             src: '5.jpg'
         }) );
 
+        // Moving the container div
         document.body.style.perspective = '800px';
         document.body.style.perspectiveOrigin = '50% 200px';
+
+
+        //
+        // Save
+        //
+
+
+        document.getElementById('btnSave').addEventListener("click", function() {
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            context.clearRect ( 0 , 0 , canvas.width, canvas.height );
+
+            var options = {
+                zoom: 1
+            };
+            rasterizeHTML.drawHTML(container.innerHTML, canvas, options);
+            
+            /*
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+
+
+            var doc = document.implementation.createHTMLDocument("");
+            doc.write( container.innerHTML );
+
+            // You must manually set the xmlns if you intend to immediately serialize 
+            // the HTML document to a string as opposed to appending it to a 
+            // <foreignObject> in the DOM
+            doc.documentElement.setAttribute("xmlns", doc.documentElement.namespaceURI);
+
+            // Get well-formed markup
+            var html = (new XMLSerializer).serializeToString(doc);
+
+
+            var data = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">' +
+                       '<foreignObject width="100%" height="100%">' +
+                       '<div xmlns="http://www.w3.org/1999/xhtml" style="font-size:40px">' +
+
+                        // extract the html content of div
+                        html +
+                        //container.innerHTML + 
+
+                       '</div>' +
+                       '</foreignObject>' +
+                       '</svg>';
+
+            var DOMURL = window.URL || window.webkitURL || window;
+
+            var img = new Image();
+            var svg = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+            var url = DOMURL.createObjectURL(svg);
+
+            img.onload = function () {
+                ctx.drawImage(img, 0, 0);
+                DOMURL.revokeObjectURL(url);
+            };
+            img.onerror = function (e) {
+                console.warn('Error....', e);
+            };
+
+            img.src = url;
+            */
+        }, false);
+
+
+        //
+        // Animation
+        //
+
 
         setInterval(function () {
             counter++;
@@ -63,16 +133,15 @@ var add = (function () {
             placeholders[2].childNodes[0].style.top = -(counter/2) + 'px';
             placeholders[2].childNodes[0].style.left = -(counter/2) + 'px';
 
-            /*
             // Black and white
             placeholders[3].style["-webkit-filter"] = 'grayscale(' + (100 * counter / maxCounter) + '%)';
             placeholders[3].style["-moz-filter"] = 'grayscale(' + (100 * counter / maxCounter) + '%)';
             placeholders[3].style["filter"] = 'grayscale(' + (100 * counter / maxCounter) + '%)';
-            */
 
             container.style.transform = 'rotateY(' + (-20 * counter/maxCounter)  + 'deg)';
         }, myTimeout);
 
+        /*
         // Black and white
         imageObj = placeholders[3].childNodes[0];
         imageObj.addEventListener('load', function() {
@@ -85,6 +154,7 @@ var add = (function () {
                 placeholders[3].childNodes[0].src = grayscale(originalImage, 300, 250, counter / maxCounter);
             }, myTimeout);
         }, false);
+        */
     }
 
     function createPlaceholder(options) {
@@ -99,6 +169,25 @@ var add = (function () {
         div.style.border = "1px solid #000000";
         //div.innerHTML = "Hello";
         div.style.overflow = 'hidden';
+
+
+        /*
+        var tmpImg = new Image();
+        tmpImg.setAttribute('crossOrigin', 'anonymous');
+        tmpImg.src = 'picture/' + options.src;
+        tmpImg.onload = function () {
+            var canvas = document.createElement("canvas");
+            canvas.width =this.width;
+            canvas.height =this.height;
+            //
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(this, 0, 0);
+            //
+            var dataURL = canvas.toDataURL("image/png");
+            //
+            img.src = dataURL;
+        }
+        */
 
         var img = document.createElement("img");
         img.src = 'picture/' + options.src;
